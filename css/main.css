@@ -868,6 +868,9 @@ section {
     flex-direction: column;
     border: 1px solid var(--neutral-100);
     gap: 0;
+    align-items: stretch;
+    width: 100%;
+    max-width: none;
 }
 
 .lead-form--demo h3 {
