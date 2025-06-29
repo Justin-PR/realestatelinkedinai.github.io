@@ -167,8 +167,9 @@ p {
 }
 
 .btn--large {
-    padding: var(--space-4) var(--space-8);
+    padding: var(--space-4) var(--space-10);
     font-size: 1.125rem;
+    min-height: 56px;
 }
 
 .btn--full {
@@ -231,7 +232,7 @@ p {
     font-family: var(--font-display);
     font-size: 1.25rem;
     font-weight: 700;
-    color: var(--neutral-900);
+    color: var(--primary-navy);
 }
 
 .nav__actions {
@@ -356,7 +357,7 @@ p {
     gap: var(--space-3);
     margin-bottom: var(--space-4);
     background: var(--neutral-white);
-    padding: var(--space-2);
+    padding: var(--space-4);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     border: 1px solid var(--neutral-200);
@@ -366,10 +367,15 @@ p {
     flex: 1;
     padding: var(--space-4);
     font-size: 1rem;
-    border: 2px solid var(--neutral-200);
+    border: 2px solid var(--neutral-300);
     border-radius: var(--radius);
     transition: all 0.2s ease;
-    background: var(--neutral-50);
+    background: var(--neutral-white);
+    color: var(--neutral-900);
+}
+
+.form__input::placeholder {
+    color: var(--neutral-500);
 }
 
 .form__input:focus {
@@ -812,6 +818,13 @@ section {
 
 .lead-form--demo .form__input {
     margin-bottom: var(--space-4);
+    background: var(--neutral-white);
+    border: 2px solid var(--neutral-300);
+    color: var(--neutral-900);
+}
+
+.lead-form--demo .form__input::placeholder {
+    color: var(--neutral-500);
 }
 
 .lead-form--demo select {
