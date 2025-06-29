@@ -1,0 +1,652 @@
+// Form handling and lead capture functionality
+class FormHandler {
+    constructor() {
+        this.forms = new Map();
+        this.init();
+    }
+
+    init() {
+        this.setupForms();
+        this.setupAutoComplete();
+        this.setupFormProgress();
+        this.setupExitIntent();
+    }
+
+    setupForms() {
+        const forms = document.querySelectorAll('.lead-form');
+        
+        forms.forEach(form => {
+            const formId = form.id || this.generateFormId();
+            this.forms.set(formId, {
+                element: form,
+                attempts: 0,
+                startTime: Date.now(),
+                fields: this.getFormFields(form)
+            });
+            
+            this.enhanceForm(form, formId);
+        });
+    }
+
+    generateFormId() {
+        return 'form_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    getFormFields(form) {
+        const fields = {};
+        const inputs = form.querySelectorAll('.form__input');
+        
+        inputs.forEach(input => {
+            fields[input.name || input.type] = {
+                element: input,
+                touched: false,
+                valid: false,
+                value: ''
+            };
+        });
+        
+        return fields;
+    }
+
+    enhanceForm(form, formId) {
+        const inputs = form.querySelectorAll('.form__input');
+        
+        inputs.forEach(input => {
+            // Add input event listeners
+            input.addEventListener('input', (e) => {
+                this.handleInputChange(e, formId);
+            });
+            
+            input.addEventListener('focus', (e) => {
+                this.handleInputFocus(e, formId);
+            });
+            
+            input.addEventListener('blur', (e) => {
+                this.handleInputBlur(e, formId);
+            });
+            
+            // Add placeholder animation
+            this.addPlaceholderAnimation(input);
+        });
+        
+        // Add form submission handler
+        form.addEventListener('submit', (e) => {
+            this.handleFormSubmit(e, formId);
+        });
+    }
+
+    addPlaceholderAnimation(input) {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'form__input-wrapper';
+        
+        const label = document.createElement('label');
+        label.className = 'form__label';
+        label.textContent = input.placeholder;
+        label.setAttribute('for', input.id || '');
+        
+        input.parentNode.insertBefore(wrapper, input);
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+        
+        // Clear placeholder since we're using label
+        input.placeholder = '';
+        
+        // Add floating label functionality
+        const updateLabel = () => {
+            if (input.value || input === document.activeElement) {
+                wrapper.classList.add('form__input-wrapper--active');
+            } else {
+                wrapper.classList.remove('form__input-wrapper--active');
+            }
+        };
+        
+        input.addEventListener('focus', updateLabel);
+        input.addEventListener('blur', updateLabel);
+        input.addEventListener('input', updateLabel);
+        
+        // Initial state
+        updateLabel();
+    }
+
+    handleInputChange(event, formId) {
+        const input = event.target;
+        const formData = this.forms.get(formId);
+        const fieldName = input.name || input.type;
+        
+        if (formData && formData.fields[fieldName]) {
+            formData.fields[fieldName].value = input.value;
+            formData.fields[fieldName].touched = true;
+            
+            // Real-time validation
+            this.validateField(input, formId);
+        }
+        
+        this.trackFieldInteraction(input, 'input_change');
+    }
+
+    handleInputFocus(event, formId) {
+        const input = event.target;
+        this.trackFieldInteraction(input, 'input_focus');
+        
+        // Add focus styling
+        input.parentElement.classList.add('form__input-wrapper--focused');
+        
+        // Track time to focus for UX analysis
+        const formData = this.forms.get(formId);
+        if (formData) {
+            const timeToFocus = Date.now() - formData.startTime;
+            this.trackEvent('form_field_focus_time', {
+                field: input.name || input.type,
+                time_to_focus: timeToFocus
+            });
+        }
+    }
+
+    handleInputBlur(event, formId) {
+        const input = event.target;
+        input.parentElement.classList.remove('form__input-wrapper--focused');
+        
+        // Validate on blur
+        this.validateField(input, formId);
+    }
+
+    validateField(input, formId) {
+        const value = input.value.trim();
+        let isValid = true;
+        let errorMessage = '';
+        
+        // Remove previous validation states
+        this.clearFieldError(input);
+        
+        // Required field validation
+        if (input.required && !value) {
+            isValid = false;
+            errorMessage = 'This field is required';
+        }
+        
+        // Email validation
+        else if (input.type === 'email' && value) {
+            const emailRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+            if (!emailRegex.test(value)) {
+                isValid = false;
+                errorMessage = 'Please enter a valid email address';
+            }
+        }
+        
+        // Phone validation
+        else if (input.type === 'tel' && value) {
+            const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+            const cleanPhone = value.replace(/[\s\-\(\)]/g, '');
+            if (!phoneRegex.test(cleanPhone) || cleanPhone.length < 10) {
+                isValid = false;
+                errorMessage = 'Please enter a valid phone number';
+            }
+        }
+        
+        // Name validation
+        else if (input.type === 'text' && input.name === 'name' && value) {
+            if (value.length < 2) {
+                isValid = false;
+                errorMessage = 'Please enter your full name';
+            }
+        }
+        
+        // Update field state
+        const formData = this.forms.get(formId);
+        if (formData && formData.fields[input.name || input.type]) {
+            formData.fields[input.name || input.type].valid = isValid;
+        }
+        
+        // Show/hide error
+        if (!isValid) {
+            this.showFieldError(input, errorMessage);
+        }
+        
+        return isValid;
+    }
+
+    showFieldError(input, message) {
+        const wrapper = input.closest('.form__input-wrapper') || input.parentElement;
+        wrapper.classList.add('form__input-wrapper--error');
+        
+        let errorElement = wrapper.querySelector('.form__error');
+        if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.className = 'form__error';
+            wrapper.appendChild(errorElement);
+        }
+        
+        errorElement.textContent = message;
+        errorElement.style.display = 'block';
+    }
+
+    clearFieldError(input) {
+        const wrapper = input.closest('.form__input-wrapper') || input.parentElement;
+        wrapper.classList.remove('form__input-wrapper--error');
+        
+        const errorElement = wrapper.querySelector('.form__error');
+        if (errorElement) {
+            errorElement.style.display = 'none';
+        }
+    }
+
+    handleFormSubmit(event, formId) {
+        event.preventDefault();
+        
+        const form = event.target;
+        const formData = this.forms.get(formId);
+        
+        if (!formData) return;
+        
+        formData.attempts++;
+        
+        // Validate all fields
+        const inputs = form.querySelectorAll('.form__input');
+        let isFormValid = true;
+        
+        inputs.forEach(input => {
+            if (!this.validateField(input, formId)) {
+                isFormValid = false;
+            }
+        });
+        
+        if (!isFormValid) {
+            this.handleFormError(form, 'Please correct the errors above');
+            this.trackEvent('form_validation_error', {
+                form_id: formId,
+                attempt: formData.attempts
+            });
+            return;
+        }
+        
+        // Collect and submit data
+        this.submitFormData(form, formId);
+    }
+
+    async submitFormData(form, formId) {
+        const formData = this.forms.get(formId);
+        const submitButton = form.querySelector('button[type="submit"]');
+        const originalButtonText = submitButton.textContent;
+        
+        // Show loading state
+        this.setFormLoading(form, submitButton, true);
+        
+        try {
+            // Collect form data
+            const data = this.collectFormData(form);
+            data.form_id = formId;
+            data.timestamp = new Date().toISOString();
+            data.user_agent = navigator.userAgent;
+            data.referrer = document.referrer;
+            
+            // Add UTM parameters if available
+            data.utm = this.getUTMParameters();
+            
+            // Submit to multiple endpoints
+            const submissions = [
+                this.submitToAPI(data),
+                this.submitToEmail(data),
+                this.submitToWebhook(data)
+            ];
+            
+            const results = await Promise.allSettled(submissions);
+            
+            // Check if at least one submission succeeded
+            const hasSuccess = results.some(result => result.status === 'fulfilled');
+            
+            if (hasSuccess) {
+                this.handleFormSuccess(form, formId, data);
+            } else {
+                throw new Error('All submission methods failed');
+            }
+            
+        } catch (error) {
+            console.error('Form submission error:', error);
+            this.handleFormError(form, 'Submission failed. Please try again or contact support.');
+            this.trackEvent('form_submit_error', {
+                form_id: formId,
+                error: error.message,
+                attempt: formData.attempts
+            });
+        } finally {
+            this.setFormLoading(form, submitButton, false, originalButtonText);
+        }
+    }
+
+    collectFormData(form) {
+        const formData = new FormData(form);
+        const data = {};
+        
+        for (let [key, value] of formData.entries()) {
+            data[key] = value;
+        }
+        
+        return data;
+    }
+
+    async submitToAPI(data) {
+        const response = await fetch('/api/submit-lead', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`API submission failed: ${response.status}`);
+        }
+        
+        return response.json();
+    }
+
+    async submitToEmail(data) {
+        // Using a service like EmailJS or Formspree
+        const response = await fetch('https://formspree.io/f/your-form-id', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Email submission failed: ${response.status}`);
+        }
+        
+        return response.json();
+    }
+
+    async submitToWebhook(data) {
+        // Webhook for CRM integration (like Zapier)
+        const webhookUrl = 'https://hooks.zapier.com/hooks/catch/your-webhook-id';
+        
+        const response = await fetch(webhookUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+        });
+        
+        if (!response.ok) {
+            throw new Error(`Webhook submission failed: ${response.status}`);
+        }
+        
+        return response.json();
+    }
+
+    setFormLoading(form, button, isLoading, originalText = 'Submit') {
+        if (isLoading) {
+            button.disabled = true;
+            button.textContent = 'Submitting...';
+            form.classList.add('form--loading');
+        } else {
+            button.disabled = false;
+            button.textContent = originalText;
+            form.classList.remove('form--loading');
+        }
+    }
+
+    handleFormSuccess(form, formId, data) {
+        // Track successful submission
+        this.trackEvent('form_submit_success', {
+            form_id: formId,
+            conversion_type: this.getConversionType(form)
+        });
+        
+        // Show success message
+        this.showSuccessMessage(form, data);
+        
+        // Trigger additional actions
+        this.triggerPostSubmissionActions(data);
+    }
+
+    handleFormError(form, message) {
+        form.classList.add('form--error');
+        
+        // Show error message
+        let errorContainer = form.querySelector('.form__error-container');
+        if (!errorContainer) {
+            errorContainer = document.createElement('div');
+            errorContainer.className = 'form__error-container';
+            form.insertBefore(errorContainer, form.firstChild);
+        }
+        
+        errorContainer.innerHTML = `
+            <div class="form__error-message">
+                <span class="error-icon">⚠️</span>
+                ${message}
+            </div>
+        `;
+        
+        // Remove error state after animation
+        setTimeout(() => {
+            form.classList.remove('form--error');
+        }, 3000);
+    }
+
+    showSuccessMessage(form, data) {
+        const successMessage = document.createElement('div');
+        successMessage.className = 'form__success-message';
+        
+        const conversionType = this.getConversionType(form);
+        let message = '';
+        
+        switch (conversionType) {
+            case 'demo':
+                message = `
+                    <div class="success__icon">📅</div>
+                    <h3>Demo Booked Successfully!</h3>
+                    <p>Thank you ${data.name || 'for your interest'}! We'll contact you within 2 hours to schedule your personalized LinkedIn Authority demo.</p>
+                    <div class="success__next-steps">
+                        <h4>What happens next:</h4>
+                        <ul>
+                            <li>✅ Check your email for a confirmation</li>
+                            <li>📞 We'll call you to schedule your demo</li>
+                            <li>🎯 Get a custom LinkedIn strategy for your market</li>
+                        </ul>
+                    </div>
+                `;
+                break;
+            case 'email_capture':
+            default:
+                message = `
+                    <div class="success__icon">🎉</div>
+                    <h3>Welcome to LinkedIn Authority AI!</h3>
+                    <p>Thank you ${data.name || 'for subscribing'}! Your free LinkedIn Authority Content Kit is on its way to ${data.email}.</p>
+                    <div class="success__next-steps">
+                        <h4>What's included:</h4>
+                        <ul>
+                            <li>📊 LinkedIn vs Facebook Lead Quality Report</li>
+                            <li>📝 10 High-Converting Post Templates</li>
+                            <li>🎯 Market Authority Building Guide</li>
+                            <li>💰 ROI Calculator for Real Estate Agents</li>
+                        </ul>
+                    </div>
+                `;
+                break;
+        }
+        
+        successMessage.innerHTML = message;
+        
+        // Replace form with success message
+        form.parentNode.replaceChild(successMessage, form);
+        
+        // Add success animation
+        successMessage.classList.add('animate-scale-in');
+    }
+
+    getConversionType(form) {
+        if (form.classList.contains('lead-form--demo')) {
+            return 'demo';
+        }
+        return 'email_capture';
+    }
+
+    triggerPostSubmissionActions(data) {
+        // Trigger Facebook Pixel event
+        if (typeof fbq !== 'undefined') {
+            fbq('track', 'Lead', {
+                content_name: 'LinkedIn Authority AI',
+                content_category: 'Real Estate Software',
+                value: 197, // Average customer value
+                currency: 'USD'
+            });
+        }
+        
+        // Trigger Google Ads conversion
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'conversion', {
+                send_to: 'AW-CONVERSION_ID/CONVERSION_LABEL',
+                value: 197,
+                currency: 'USD'
+            });
+        }
+        
+        // Redirect to thank you page (optional)
+        // window.location.href = '/thank-you';
+    }
+
+    setupAutoComplete() {
+        // Add autocomplete attributes for better UX
+        const emailInputs = document.querySelectorAll('input[type="email"]');
+        emailInputs.forEach(input => {
+            input.setAttribute('autocomplete', 'email');
+        });
+        
+        const nameInputs = document.querySelectorAll('input[name*="name"]');
+        nameInputs.forEach(input => {
+            input.setAttribute('autocomplete', 'name');
+        });
+        
+        const phoneInputs = document.querySelectorAll('input[type="tel"]');
+        phoneInputs.forEach(input => {
+            input.setAttribute('autocomplete', 'tel');
+        });
+    }
+
+    setupFormProgress() {
+        // Track form completion progress
+        const forms = document.querySelectorAll('.lead-form--demo');
+        
+        forms.forEach(form => {
+            const inputs = form.querySelectorAll('.form__input');
+            const totalFields = inputs.length;
+            
+            inputs.forEach(input => {
+                input.addEventListener('input', () => {
+                    const completedFields = Array.from(inputs).filter(inp => inp.value.trim()).length;
+                    const progress = (completedFields / totalFields) * 100;
+                    
+                    this.trackEvent('form_progress', {
+                        progress: Math.round(progress),
+                        completed_fields: completedFields,
+                        total_fields: totalFields
+                    });
+                });
+            });
+        });
+    }
+
+    setupExitIntent() {
+        let exitIntentShown = false;
+        
+        document.addEventListener('mouseleave', (e) => {
+            if (e.clientY <= 0 && !exitIntentShown) {
+                exitIntentShown = true;
+                this.showExitIntentPopup();
+            }
+        });
+    }
+
+    showExitIntentPopup() {
+        // Create exit intent popup
+        const popup = document.createElement('div');
+        popup.className = 'exit-intent-popup';
+        popup.innerHTML = `
+            <div class="popup__overlay">
+                <div class="popup__content">
+                    <button class="popup__close">&times;</button>
+                    <h3>Wait! Don't Miss Out on 277% More Leads</h3>
+                    <p>Get your free LinkedIn Authority Content Kit before you go. It includes everything you need to start attracting high-net-worth clients on LinkedIn.</p>
+                    <form class="popup__form">
+                        <input type="email" placeholder="Enter your email" class="popup__input" required>
+                        <button type="submit" class="btn btn--primary">Get Free Kit</button>
+                    </form>
+                </div>
+            </div>
+        `;
+        
+        document.body.appendChild(popup);
+        
+        // Add event listeners
+        const closeButton = popup.querySelector('.popup__close');
+        const overlay = popup.querySelector('.popup__overlay');
+        const form = popup.querySelector('.popup__form');
+        
+        const closePopup = () => {
+            popup.remove();
+        };
+        
+        closeButton.addEventListener('click', closePopup);
+        overlay.addEventListener('click', (e) => {
+            if (e.target === overlay) closePopup();
+        });
+        
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = form.querySelector('.popup__input').value;
+            
+            // Submit email
+            this.submitToEmail({ email, source: 'exit_intent' });
+            
+            // Show success and close
+            form.innerHTML = '<p>✅ Thank you! Check your email for the free kit.</p>';
+            setTimeout(closePopup, 2000);
+            
+            this.trackEvent('exit_intent_conversion', { email });
+        });
+        
+        // Track exit intent shown
+        this.trackEvent('exit_intent_shown');
+    }
+
+    getUTMParameters() {
+        const urlParams = new URLSearchParams(window.location.search);
+        return {
+            utm_source: urlParams.get('utm_source'),
+            utm_medium: urlParams.get('utm_medium'),
+            utm_campaign: urlParams.get('utm_campaign'),
+            utm_term: urlParams.get('utm_term'),
+            utm_content: urlParams.get('utm_content')
+        };
+    }
+
+    trackFieldInteraction(input, action) {
+        this.trackEvent('form_field_interaction', {
+            field_name: input.name || input.type,
+            field_type: input.type,
+            action: action
+        });
+    }
+
+    trackEvent(eventName, properties = {}) {
+        // Use the main app's tracking method if available
+        if (window.linkedInAuthorityApp && window.linkedInAuthorityApp.trackEvent) {
+            window.linkedInAuthorityApp.trackEvent(eventName, properties);
+        } else {
+            console.log('Form Event:', eventName, properties);
+        }
+    }
+}
+
+// Initialize form handler
+document.addEventListener('DOMContentLoaded', () => {
+    window.formHandler = new FormHandler();
+});
+
+// Export for testing
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = FormHandler;
+}
