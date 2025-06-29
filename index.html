@@ -71,7 +71,7 @@
                     <div class="hero__cta">
                         <form class="lead-form" id="hero-form">
                             <input type="email" placeholder="Enter your email address" class="form__input" required>
-                            <button type="submit" class="btn btn--primary btn--large">Get Free Authority Content Kit</button>
+                            <button type="submit" class="btn btn--primary btn--large">Get Free Kit</button>
                         </form>
                         <p class="form__disclaimer">Free instant access. Join 2,800+ agents already dominating LinkedIn.</p>
                     </div>
@@ -370,17 +370,34 @@
                 <div class="demo__form">
                     <form class="lead-form lead-form--demo" id="demo-form">
                         <h3>Book Your Free Demo</h3>
-                        <input type="text" placeholder="Your Name" class="form__input" required>
-                        <input type="email" placeholder="Email Address" class="form__input" required>
-                        <input type="tel" placeholder="Phone Number" class="form__input" required>
-                        <select class="form__input" required>
-                            <option value="">Years in Real Estate</option>
-                            <option value="0-2">0-2 years</option>
-                            <option value="3-5">3-5 years</option>
-                            <option value="6-10">6-10 years</option>
-                            <option value="10+">10+ years</option>
-                        </select>
-                        <button type="submit" class="btn btn--primary btn--full">Book My Free Demo</button>
+                        
+                        <div class="form__field">
+                            <label for="demo-name" class="form__label">Your Name</label>
+                            <input type="text" id="demo-name" placeholder="Enter your full name" class="form__input" required>
+                        </div>
+                        
+                        <div class="form__field">
+                            <label for="demo-email" class="form__label">Email Address</label>
+                            <input type="email" id="demo-email" placeholder="your.email@example.com" class="form__input" required>
+                        </div>
+                        
+                        <div class="form__field">
+                            <label for="demo-phone" class="form__label">Phone Number</label>
+                            <input type="tel" id="demo-phone" placeholder="(555) 123-4567" class="form__input" required>
+                        </div>
+                        
+                        <div class="form__field">
+                            <label for="demo-experience" class="form__label">Years in Real Estate</label>
+                            <select id="demo-experience" class="form__input" required>
+                                <option value="">Select your experience level</option>
+                                <option value="0-2">0-2 years (New Agent)</option>
+                                <option value="3-5">3-5 years (Experienced)</option>
+                                <option value="6-10">6-10 years (Veteran)</option>
+                                <option value="10+">10+ years (Expert)</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" class="btn btn--primary btn--full">Book Free Demo</button>
                         <p class="form__disclaimer">No sales pressure. Just valuable insights you can use immediately.</p>
                     </form>
                 </div>

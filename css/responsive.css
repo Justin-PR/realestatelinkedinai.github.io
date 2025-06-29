@@ -83,12 +83,18 @@
     /* Lead Forms */
     .lead-form {
         flex-direction: column;
-        gap: var(--space-3);
-        padding: var(--space-4);
+        gap: var(--space-4);
+        padding: var(--space-5);
     }
     
     .form__input {
-        padding: var(--space-3);
+        padding: var(--space-3) var(--space-4);
+        min-height: 48px;
+    }
+    
+    .lead-form .btn {
+        min-height: 48px;
+        padding: var(--space-3) var(--space-5);
     }
     
     /* Problem Grid */
@@ -356,7 +362,27 @@
     
     /* Demo Form */
     .lead-form--demo {
-        padding: var(--space-6);
+        padding: var(--space-8);
+    }
+    
+    .lead-form--demo h3 {
+        font-size: 1.25rem;
+        margin-bottom: var(--space-6);
+    }
+    
+    .form__field {
+        margin-bottom: var(--space-4);
+    }
+    
+    .form__label {
+        font-size: 0.75rem;
+        margin-bottom: var(--space-1);
+    }
+    
+    .lead-form--demo .form__input {
+        min-height: 48px;
+        padding: var(--space-3);
+        font-size: 1rem;
     }
     
     .demo__benefit {
