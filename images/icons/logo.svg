@@ -11,12 +11,11 @@
   <!-- Main circle background -->
   <circle cx="20" cy="20" r="18" fill="url(#logoGradient)" stroke="#1a365d" stroke-width="2"/>
   
-  <!-- LinkedIn-inspired "L" -->
-  <rect x="8" y="12" width="3" height="16" fill="white" rx="1"/>
-  <rect x="8" y="25" width="10" height="3" fill="white" rx="1"/>
+  <!-- Real Estate "R" -->
+  <path d="M8 12 L8 28 L11 28 L11 21 L15 21 L15 28 L18 28 L18 21 L16 19 L18 12 L15 12 L15 17 L11 17 L11 12 Z M11 15 L15 15 L15 17 L11 17 Z" fill="white"/>
   
   <!-- AI-inspired "A" -->
-  <path d="M18 28 L22 12 L26 12 L30 28 L27 28 L26.2 25 L21.8 25 L21 28 Z M22.4 22 L25.6 22 L24 17 Z" fill="white"/>
+  <path d="M20 28 L24 12 L27 12 L31 28 L28 28 L27.2 25 L23.8 25 L23 28 Z M24.4 22 L26.6 22 L25.5 18 Z" fill="white"/>
   
   <!-- Small accent dots representing AI/data -->
   <circle cx="32" cy="12" r="1.5" fill="#f59e0b"/>
