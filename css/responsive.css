@@ -100,6 +100,14 @@
         gap: var(--space-6);
     }
     
+    .features__hero {
+        height: 200px;
+    }
+    
+    .features .container {
+        padding-top: var(--space-16);
+    }
+    
     .problem__item,
     .feature,
     .testimonial,
@@ -243,6 +251,14 @@
     .hero__image {
         height: 300px;
         font-size: 1.25rem;
+    }
+    
+    .features__hero {
+        height: 150px;
+    }
+    
+    .features .container {
+        padding-top: var(--space-12);
     }
     
     /* Buttons */
