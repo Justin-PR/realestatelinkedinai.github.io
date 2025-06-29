@@ -552,17 +552,28 @@ section {
     padding-top: var(--space-20);
 }
 
-.features .section__title,
-.features .section__subtitle {
+.features .container .section__title,
+.features .container .section__subtitle,
+.features .container h2,
+.features .container p.section__subtitle {
     color: var(--neutral-white) !important;
     position: relative;
     z-index: 2;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7);
 }
 
-.features h2,
-.features p {
+.features h2.section__title {
     color: var(--neutral-white) !important;
+}
+
+.features p.section__subtitle {
+    color: var(--neutral-white) !important;
+}
+
+.features-title,
+.features-subtitle {
+    color: var(--neutral-white) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.7) !important;
 }
 
 .features__grid {
