@@ -155,7 +155,7 @@ class FormHandler {
         let isValid = true;
         let errorMessage = '';
         
-        // Remove previous validation states
+        // Always clear errors first to prevent duplicates
         this.clearFieldError(input);
         
         // Required field validation
@@ -184,7 +184,7 @@ class FormHandler {
         }
         
         // Name validation
-        else if (input.type === 'text' && input.name === 'name' && value) {
+        else if (input.type === 'text' && (input.name === 'name' || input.id.includes('name')) && value) {
             if (value.length < 2) {
                 isValid = false;
                 errorMessage = 'Please enter your full name';
@@ -197,7 +197,7 @@ class FormHandler {
             formData.fields[input.name || input.type].valid = isValid;
         }
         
-        // Show/hide error
+        // Show error only if invalid
         if (!isValid) {
             this.showFieldError(input, errorMessage);
         }
@@ -206,28 +206,41 @@ class FormHandler {
     }
 
     showFieldError(input, message) {
-        const wrapper = input.closest('.form__input-wrapper') || input.parentElement;
-        wrapper.classList.add('form__input-wrapper--error');
+        // Find the correct wrapper - look for form__field first, then parent
+        const wrapper = input.closest('.form__field') || input.closest('.form__input-wrapper') || input.parentElement;
         
-        let errorElement = wrapper.querySelector('.form__error');
+        // Remove any existing error styling and elements first
+        this.clearFieldError(input);
+        
+        // Add error styling
+        wrapper.classList.add('form__field--error');
+        input.classList.add('form__input--error');
+        
+        // Create or update error element
+        let errorElement = wrapper.querySelector('.form__error-message');
         if (!errorElement) {
             errorElement = document.createElement('div');
-            errorElement.className = 'form__error';
+            errorElement.className = 'form__error-message';
             wrapper.appendChild(errorElement);
         }
         
         errorElement.textContent = message;
-        errorElement.style.display = 'block';
+        errorElement.style.display = 'flex';
     }
 
     clearFieldError(input) {
-        const wrapper = input.closest('.form__input-wrapper') || input.parentElement;
-        wrapper.classList.remove('form__input-wrapper--error');
+        // Find the correct wrapper
+        const wrapper = input.closest('.form__field') || input.closest('.form__input-wrapper') || input.parentElement;
         
-        const errorElement = wrapper.querySelector('.form__error');
-        if (errorElement) {
-            errorElement.style.display = 'none';
-        }
+        // Remove all error styling
+        wrapper.classList.remove('form__field--error', 'form__input-wrapper--error');
+        input.classList.remove('form__input--error');
+        
+        // Remove all error elements to prevent duplicates
+        const errorElements = wrapper.querySelectorAll('.form__error, .form__error-message');
+        errorElements.forEach(element => {
+            element.remove();
+        });
     }
 
     handleFormSubmit(event, formId) {

@@ -184,6 +184,7 @@ p {
     display: flex;
     align-items: center;
     justify-content: center;
+    align-self: flex-end;
 }
 
 .btn--full {
@@ -341,6 +342,7 @@ p {
 /* Modern Lead Forms */
 .lead-form {
     display: flex;
+    align-items: flex-end;
     gap: var(--space-3);
     margin-bottom: var(--space-4);
     background: var(--neutral-white);
@@ -538,7 +540,7 @@ section {
     left: 0;
     right: 0;
     bottom: 0;
-    background: linear-gradient(135deg, rgba(248, 250, 252, 0.95) 0%, rgba(248, 250, 252, 0.85) 100%);
+    background: linear-gradient(135deg, rgba(15, 23, 42, 0.85) 0%, rgba(30, 41, 59, 0.75) 100%);
 }
 
 .features .container {
@@ -549,9 +551,10 @@ section {
 
 .features .section__title,
 .features .section__subtitle {
-    color: var(--neutral-900);
+    color: var(--neutral-white);
     position: relative;
     z-index: 2;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .features__grid {
@@ -928,13 +931,13 @@ section {
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%232b77e6' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m6 8 4 4 4-4'/%3e%3c/svg%3e");
 }
 
-/* Form Validation States */
+/* Form Validation States - Disabled automatic browser validation to prevent duplicates */
 .form__input:valid {
-    border-color: var(--success);
+    /* Removed automatic validation styling */
 }
 
 .form__input:invalid:not(:placeholder-shown) {
-    border-color: var(--error);
+    /* Removed automatic validation styling to prevent duplicate errors */
 }
 
 .form__field--error .form__input {
