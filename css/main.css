@@ -557,7 +557,12 @@ section {
     color: var(--neutral-white) !important;
     position: relative;
     z-index: 2;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.features h2,
+.features p {
+    color: var(--neutral-white) !important;
 }
 
 .features__grid {
