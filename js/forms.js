@@ -355,7 +355,7 @@ class FormHandler {
 
     async submitToEmail(data) {
         // Using a service like EmailJS or Formspree
-        const response = await fetch('https://formspree.io/f/your-form-id', {
+        const response = await fetch('https://formspree.io/f/xzzgopaw', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
