@@ -554,7 +554,7 @@ section {
 
 .features .section__title,
 .features .section__subtitle {
-    color: var(--neutral-white);
+    color: var(--neutral-white) !important;
     position: relative;
     z-index: 2;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -834,7 +834,8 @@ section {
 
 .demo .section__title,
 .demo .section__subtitle {
-    color: var(--neutral-white);
+    color: var(--neutral-white) !important;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
 .demo__content {
@@ -858,10 +859,16 @@ section {
     background: rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-lg);
     backdrop-filter: blur(10px);
+    color: var(--neutral-white);
 }
 
 .demo__benefit .benefit__icon {
     font-size: 1.5rem;
+}
+
+.demo__benefit span {
+    color: var(--neutral-white);
+    font-weight: 500;
 }
 
 .lead-form--demo {
