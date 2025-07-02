@@ -12,6 +12,7 @@ class LinkedInAuthorityApp {
         this.setupFAQAccordion();
         this.setupNavbarScrollEffect();
         this.setupFormValidation();
+        this.setupLegalSections();
         this.trackPageViews();
     }
 
@@ -387,6 +388,43 @@ class LinkedInAuthorityApp {
         // Only track if UTM parameters exist
         if (Object.values(utmParams).some(param => param !== null)) {
             this.trackEvent('utm_tracking', utmParams);
+        }
+    }
+
+    // Setup legal sections show/hide functionality
+    setupLegalSections() {
+        // Handle privacy policy links
+        document.querySelectorAll('a[href="#privacy-policy"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.toggleLegalSection('privacy-policy');
+            });
+        });
+
+        // Handle terms of service links
+        document.querySelectorAll('a[href="#terms-of-service"]').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                this.toggleLegalSection('terms-of-service');
+            });
+        });
+    }
+
+    // Toggle legal section visibility
+    toggleLegalSection(sectionId) {
+        const section = document.getElementById(sectionId);
+        if (section) {
+            // Hide all legal sections first
+            document.querySelectorAll('.legal-section').forEach(s => {
+                s.style.display = 'none';
+            });
+
+            // Show the requested section
+            section.style.display = 'block';
+            section.scrollIntoView({ behavior: 'smooth' });
+
+            // Track the view
+            this.trackEvent('legal_section_view', { section: sectionId });
         }
     }
 }

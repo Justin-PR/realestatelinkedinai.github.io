@@ -123,16 +123,21 @@
         flex-direction: column;
         gap: var(--space-4);
         padding: var(--space-5);
+        align-items: stretch;
     }
     
     .form__input {
         padding: var(--space-3) var(--space-4);
         min-height: 48px;
+        width: 100%;
+        flex: none;
     }
     
     .lead-form .btn {
         min-height: 48px;
         padding: var(--space-3) var(--space-5);
+        width: 100%;
+        flex: none;
     }
     
     /* Problem Grid */
