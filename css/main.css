@@ -1723,6 +1723,43 @@ section {
     margin-top: var(--space-8);
 }
 
+/* Professional Enhancement Styles */
+.hero__value-prop {
+    background: var(--neutral-50);
+    padding: var(--space-4) var(--space-6);
+    border-radius: var(--radius-lg);
+    margin: var(--space-6) 0;
+    border-left: 4px solid var(--primary-blue);
+}
+
+.value__text {
+    color: var(--neutral-700);
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+    font-weight: 500;
+}
+
+.stack__professional-note {
+    background: var(--neutral-50);
+    padding: var(--space-6);
+    border-radius: var(--radius-xl);
+    margin: var(--space-8) 0;
+    border: 1px solid var(--neutral-200);
+}
+
+.professional__content h4 {
+    color: var(--primary-blue);
+    margin-bottom: var(--space-3);
+    font-size: 1.125rem;
+}
+
+.professional__content p {
+    color: var(--neutral-700);
+    margin-bottom: 0;
+    line-height: 1.6;
+}
+
 /* Utility Classes */
 .text-center { text-align: center; }
 .sr-only {
