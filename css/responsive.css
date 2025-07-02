@@ -500,17 +500,28 @@
 
 /* Extra small devices (max-width: 320px) */
 @media (max-width: 320px) {
+    .offer__header {
+        height: auto;
+        min-height: 200px;
+        padding: var(--space-2) 0;
+    }
+    
     .offer__header-content {
-        max-width: 100%;
-        padding: var(--space-2);
-        margin: 0 var(--space-2);
+        max-width: calc(100vw - 1rem) !important;
+        padding: var(--space-2) var(--space-1) !important;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
     }
     
     .offer__title {
-        font-size: 1.5rem;
-        line-height: 1.4;
-        word-wrap: break-word;
-        hyphens: auto;
+        font-size: clamp(1.1rem, 3.5vw, 1.4rem) !important;
+        line-height: 1.3 !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+        -webkit-hyphens: auto !important;
+        white-space: normal !important;
     }
     
     .container {
@@ -612,6 +623,36 @@
     .demo__benefit {
         flex-direction: row;
         text-align: left;
+    }
+}
+
+/* iOS/Mobile Webkit specific fixes */
+@media screen and (max-width: 768px) {
+    .offer__header {
+        height: auto;
+        min-height: 250px;
+        padding: var(--space-4) 0;
+    }
+    
+    .offer__header-content {
+        position: relative;
+        max-width: calc(100vw - 2rem) !important;
+        padding: var(--space-4) var(--space-2) !important;
+        margin: 0 auto;
+        box-sizing: border-box;
+        width: 100%;
+    }
+    
+    .offer__title {
+        font-size: clamp(1.25rem, 4vw, 1.75rem) !important;
+        line-height: 1.2 !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        hyphens: auto !important;
+        -webkit-hyphens: auto !important;
+        -ms-hyphens: auto !important;
+        white-space: normal !important;
+        max-width: 100% !important;
     }
 }
 
