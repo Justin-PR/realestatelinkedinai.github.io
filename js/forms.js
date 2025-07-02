@@ -453,14 +453,14 @@ class FormHandler {
             case 'demo':
                 message = `
                     <div class="success__icon">📅</div>
-                    <h3>Demo Booked Successfully!</h3>
-                    <p>Thank you ${data.name || 'for your interest'}! We'll contact you within 2 hours to schedule your personalized LinkedIn Authority demo.</p>
+                    <h3>Demo Booked!</h3>
+                    <p>We'll call you within 2 hours to schedule your demo.</p>
                     <div class="success__next-steps">
                         <h4>What happens next:</h4>
                         <ul>
-                            <li>✅ Check your email for a confirmation</li>
-                            <li>📞 We'll call you to schedule your demo</li>
-                            <li>🎯 Get a custom LinkedIn strategy for your market</li>
+                            <li>✅ Email confirmation</li>
+                            <li>📞 Schedule call</li>
+                            <li>🎯 Custom strategy</li>
                         </ul>
                     </div>
                 `;
@@ -469,15 +469,14 @@ class FormHandler {
             default:
                 message = `
                     <div class="success__icon">🎉</div>
-                    <h3>Welcome to LinkedIn Authority AI!</h3>
-                    <p>Thank you ${data.name || 'for subscribing'}! Your free LinkedIn Authority Content Kit is on its way to ${data.email}.</p>
+                    <h3>Success! Check Your Email</h3>
+                    <p>Your LinkedIn Strategy Guide is on its way to ${data.email}.</p>
                     <div class="success__next-steps">
                         <h4>What's included:</h4>
                         <ul>
-                            <li>📊 LinkedIn vs Facebook Lead Quality Report</li>
-                            <li>📝 10 High-Converting Post Templates</li>
-                            <li>🎯 Market Authority Building Guide</li>
-                            <li>💰 ROI Calculator for Real Estate Agents</li>
+                            <li>📊 Lead Quality Report</li>
+                            <li>📝 Content Templates</li>
+                            <li>🎯 Authority Building Guide</li>
                         </ul>
                     </div>
                 `;
@@ -486,8 +485,24 @@ class FormHandler {
         
         successMessage.innerHTML = message;
         
+        // Get parent container for clearfix
+        const parentContainer = form.parentNode;
+        
         // Replace form with success message
-        form.parentNode.replaceChild(successMessage, form);
+        parentContainer.replaceChild(successMessage, form);
+        
+        // Add clearfix to parent container to handle floating
+        if (parentContainer) {
+            parentContainer.style.overflow = 'hidden';
+            parentContainer.style.width = '100%';
+            
+            // Create clearfix div after success message
+            const clearDiv = document.createElement('div');
+            clearDiv.style.clear = 'both';
+            clearDiv.style.height = '0';
+            clearDiv.style.visibility = 'hidden';
+            parentContainer.appendChild(clearDiv);
+        }
         
         // Add success animation
         successMessage.classList.add('animate-scale-in');
@@ -504,16 +519,19 @@ class FormHandler {
         const isSmallScreen = window.innerWidth <= 768;
         
         if (isMobile || isSmallScreen) {
-            // Apply inline styles for immediate mobile rendering
+            // Apply inline styles for left-side mobile rendering
             const mobileStyles = {
-                'max-width': 'calc(100vw - 2rem)',
-                'width': 'calc(100vw - 2rem)',
+                'max-width': window.innerWidth <= 480 ? 'calc(100vw - 1rem)' : 'calc(60vw - 1rem)',
+                'width': window.innerWidth <= 480 ? 'calc(100vw - 1rem)' : 'calc(60vw - 1rem)',
                 'padding': '1rem 0.75rem',
-                'margin': '1rem auto',
+                'margin': '1rem 0',
+                'margin-left': '0.5rem',
+                'margin-right': 'auto',
                 'box-sizing': 'border-box',
                 'position': 'relative',
                 'left': '0',
-                'right': '0',
+                'float': 'left',
+                'clear': 'both',
                 'word-wrap': 'break-word',
                 'overflow-wrap': 'break-word',
                 'white-space': 'normal'
@@ -522,7 +540,20 @@ class FormHandler {
             Object.assign(successMessage.style, mobileStyles);
             
             // Add mobile class for additional CSS targeting
-            successMessage.classList.add('success-message--mobile');
+            successMessage.classList.add('success-message--mobile', 'success-message--left');
+        } else {
+            // Desktop styling - keep on left side but larger
+            const desktopStyles = {
+                'max-width': '50%',
+                'width': '50%',
+                'margin-left': '0',
+                'margin-right': 'auto',
+                'float': 'left',
+                'clear': 'both'
+            };
+            
+            Object.assign(successMessage.style, desktopStyles);
+            successMessage.classList.add('success-message--left');
         }
     }
     
@@ -531,11 +562,11 @@ class FormHandler {
         const isSmallScreen = window.innerWidth <= 768;
         
         if (isMobile || isSmallScreen) {
-            // Force viewport positioning
+            // Force viewport positioning for left-side display
             successMessage.scrollIntoView({ 
                 behavior: 'smooth', 
-                block: 'center',
-                inline: 'center'
+                block: 'start',
+                inline: 'start'
             });
             
             // Apply additional mobile styling to child elements
