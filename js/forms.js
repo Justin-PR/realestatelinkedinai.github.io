@@ -443,6 +443,9 @@ class FormHandler {
         const successMessage = document.createElement('div');
         successMessage.className = 'form__success-message';
         
+        // Add mobile-specific styling to ensure proper viewport display
+        this.applyMobileSuccessStyles(successMessage);
+        
         const conversionType = this.getConversionType(form);
         let message = '';
         
@@ -488,6 +491,84 @@ class FormHandler {
         
         // Add success animation
         successMessage.classList.add('animate-scale-in');
+        
+        // Ensure mobile viewport positioning after DOM insertion
+        setTimeout(() => {
+            this.ensureMobileViewport(successMessage);
+        }, 100);
+    }
+    
+    applyMobileSuccessStyles(successMessage) {
+        // Detect mobile device
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isSmallScreen = window.innerWidth <= 768;
+        
+        if (isMobile || isSmallScreen) {
+            // Apply inline styles for immediate mobile rendering
+            const mobileStyles = {
+                'max-width': 'calc(100vw - 2rem)',
+                'width': 'calc(100vw - 2rem)',
+                'padding': '1rem 0.75rem',
+                'margin': '1rem auto',
+                'box-sizing': 'border-box',
+                'position': 'relative',
+                'left': '0',
+                'right': '0',
+                'word-wrap': 'break-word',
+                'overflow-wrap': 'break-word',
+                'white-space': 'normal'
+            };
+            
+            Object.assign(successMessage.style, mobileStyles);
+            
+            // Add mobile class for additional CSS targeting
+            successMessage.classList.add('success-message--mobile');
+        }
+    }
+    
+    ensureMobileViewport(successMessage) {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        const isSmallScreen = window.innerWidth <= 768;
+        
+        if (isMobile || isSmallScreen) {
+            // Force viewport positioning
+            successMessage.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center',
+                inline: 'center'
+            });
+            
+            // Apply additional mobile styling to child elements
+            const nextSteps = successMessage.querySelector('.success__next-steps');
+            if (nextSteps) {
+                nextSteps.style.width = '100%';
+                nextSteps.style.wordWrap = 'break-word';
+                nextSteps.style.overflowWrap = 'break-word';
+                
+                const listItems = nextSteps.querySelectorAll('li');
+                listItems.forEach(li => {
+                    li.style.wordWrap = 'break-word';
+                    li.style.overflowWrap = 'break-word';
+                    li.style.whiteSpace = 'normal';
+                    li.style.fontSize = window.innerWidth <= 480 ? '0.875rem' : '1rem';
+                    li.style.lineHeight = '1.4';
+                });
+            }
+            
+            // Ensure proper text sizing on very small screens
+            if (window.innerWidth <= 480) {
+                const heading = successMessage.querySelector('h3');
+                if (heading) {
+                    heading.style.fontSize = '1.25rem';
+                    heading.style.lineHeight = '1.3';
+                }
+                
+                const icon = successMessage.querySelector('.success__icon');
+                if (icon) {
+                    icon.style.fontSize = '2rem';
+                }
+            }
+        }
     }
 
     getConversionType(form) {

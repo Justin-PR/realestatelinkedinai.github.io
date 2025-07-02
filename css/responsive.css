@@ -756,6 +756,22 @@
         overflow-wrap: break-word !important;
         white-space: normal !important;
     }
+    
+    /* JavaScript-applied mobile success message class */
+    .success-message--mobile {
+        max-width: calc(100vw - 2rem) !important;
+        width: calc(100vw - 2rem) !important;
+        padding: 1rem 0.75rem !important;
+        margin: 1rem auto !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+        left: 0 !important;
+        right: 0 !important;
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
+        transform: none !important;
+    }
 }
 
 /* Touch device optimizations */
