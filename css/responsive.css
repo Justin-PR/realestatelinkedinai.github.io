@@ -31,6 +31,44 @@
         line-height: 1.2;
     }
     
+    /* New Component Adjustments */
+    .story__content {
+        grid-template-columns: 1fr;
+        gap: var(--space-12);
+    }
+    
+    .secrets__grid {
+        gap: var(--space-8);
+    }
+    
+    .secret {
+        padding: var(--space-6);
+    }
+    
+    .stack__item {
+        flex-direction: column;
+        gap: var(--space-4);
+        padding: var(--space-6);
+    }
+    
+    .testimonials__stats {
+        grid-template-columns: 1fr;
+        gap: var(--space-6);
+    }
+    
+    .urgency__timer {
+        gap: var(--space-3);
+    }
+    
+    .timer__item {
+        min-width: 60px;
+        padding: var(--space-3);
+    }
+    
+    .timer__number {
+        font-size: 1.5rem;
+    }
+    
     /* Container adjustments */
     .container {
         padding: 0 var(--space-4);
@@ -446,6 +484,46 @@
     
     .lead-form--demo {
         padding: var(--space-4);
+    }
+    
+    /* Mobile adjustments for new components */
+    .hero__pattern-interrupt {
+        font-size: 0.75rem;
+        padding: var(--space-1) var(--space-3);
+    }
+    
+    .problem__story,
+    .demo__final-thoughts {
+        padding: var(--space-4);
+        margin-bottom: var(--space-8);
+    }
+    
+    .stack__item {
+        padding: var(--space-4);
+    }
+    
+    .stack__total {
+        padding: var(--space-6);
+    }
+    
+    .stack__total-amount {
+        font-size: 2rem;
+    }
+    
+    .stack__investment-amount {
+        font-size: 2.5rem;
+    }
+    
+    .offer__title {
+        font-size: 2rem;
+    }
+    
+    .offer__subtitle {
+        font-size: 1.125rem;
+    }
+    
+    .faq__final {
+        padding: var(--space-6);
     }
 }
 
