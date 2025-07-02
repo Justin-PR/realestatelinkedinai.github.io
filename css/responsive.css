@@ -176,6 +176,27 @@
         padding: var(--space-4);
     }
     
+    /* Success Message Tablet Fixes */
+    .form__success-message {
+        max-width: calc(100vw - 4rem);
+        padding: var(--space-6) var(--space-4);
+        margin: var(--space-6) auto;
+        box-sizing: border-box;
+    }
+    
+    .success__next-steps {
+        margin-top: var(--space-5);
+    }
+    
+    .success__next-steps h4 {
+        font-size: 1.125rem;
+    }
+    
+    .success__next-steps li {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+    
     /* Pricing */
     .pricing__grid {
         grid-template-columns: 1fr;
@@ -255,6 +276,42 @@
         display: block !important;
         flex: none !important;
         margin-top: var(--space-2);
+    }
+    
+    /* Success Message Mobile Fixes */
+    .form__success-message {
+        max-width: calc(100vw - 2rem) !important;
+        padding: var(--space-4) var(--space-3) !important;
+        margin: var(--space-4) auto !important;
+        box-sizing: border-box !important;
+        width: 100% !important;
+    }
+    
+    .success__icon {
+        font-size: 2rem !important;
+        margin-bottom: var(--space-3) !important;
+    }
+    
+    .success__next-steps {
+        margin-top: var(--space-4) !important;
+        text-align: left !important;
+    }
+    
+    .success__next-steps h4 {
+        font-size: 1rem !important;
+        margin-bottom: var(--space-2) !important;
+    }
+    
+    .success__next-steps ul {
+        padding-left: 0 !important;
+        margin: 0 !important;
+    }
+    
+    .success__next-steps li {
+        padding: var(--space-1) 0 !important;
+        font-size: 0.875rem !important;
+        line-height: 1.4 !important;
+        word-wrap: break-word !important;
     }
     
     /* Typography */
@@ -602,6 +659,26 @@
     .faq__final {
         padding: var(--space-6);
     }
+    
+    /* Success Message Extra Small Devices */
+    .form__success-message {
+        max-width: calc(100vw - 1rem) !important;
+        padding: var(--space-3) var(--space-2) !important;
+        margin: var(--space-3) auto !important;
+    }
+    
+    .success__icon {
+        font-size: 1.5rem !important;
+    }
+    
+    .success__next-steps h4 {
+        font-size: 0.875rem !important;
+    }
+    
+    .success__next-steps li {
+        font-size: 0.75rem !important;
+        padding: var(--space-1) 0 !important;
+    }
 }
 
 /* Landscape orientation optimizations */
@@ -653,6 +730,31 @@
         -ms-hyphens: auto !important;
         white-space: normal !important;
         max-width: 100% !important;
+    }
+    
+    /* Success Message iOS/Webkit Fixes */
+    .form__success-message {
+        max-width: calc(100vw - 2rem) !important;
+        width: calc(100vw - 2rem) !important;
+        padding: var(--space-4) var(--space-3) !important;
+        margin: var(--space-4) auto !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+        left: 0 !important;
+        right: 0 !important;
+        overflow-wrap: break-word !important;
+        word-wrap: break-word !important;
+    }
+    
+    .success__next-steps {
+        width: 100% !important;
+        overflow-wrap: break-word !important;
+    }
+    
+    .success__next-steps li {
+        word-wrap: break-word !important;
+        overflow-wrap: break-word !important;
+        white-space: normal !important;
     }
 }
 
