@@ -299,9 +299,13 @@ p {
 }
 
 .hero__stats {
-    display: flex;
-    gap: var(--space-8);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
     margin-bottom: var(--space-10);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .stat {
