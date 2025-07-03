@@ -1210,6 +1210,31 @@ section {
     max-width: 100%;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    margin: var(--space-6) auto;
+    clear: both;
+}
+
+/* Success message outside offer header */
+.offer .form__success-message {
+    max-width: 800px;
+    margin: var(--space-8) auto;
+}
+
+/* Alternative success styling for app.js */
+.form__success {
+    background: var(--neutral-white);
+    padding: var(--space-8);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    text-align: center;
+    border: 2px solid var(--success);
+    position: relative;
+    z-index: 100;
+    max-width: 800px;
+    margin: var(--space-8) auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    clear: both;
 }
 
 .success__icon {

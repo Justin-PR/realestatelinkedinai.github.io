@@ -473,7 +473,7 @@ class FormHandler {
                 message = `
                     <div class="success__icon">🎉</div>
                     <h3>Success!</h3>
-                    <p>Downloading now. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Manual download</a></p>
+                    <p>Your strategy guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Click here if it doesn't start</a></p>
                     <div class="success__next-steps">
                         <h4>Includes:</h4>
                         <ul>
@@ -488,26 +488,42 @@ class FormHandler {
         
         successMessage.innerHTML = message;
         
-        // Get parent container for clearfix
-        const parentContainer = form.parentNode;
+        // Find the closest section container to avoid offer__header conflicts
+        const offerSection = form.closest('section');
+        const offerHeader = form.closest('.offer__header');
         
-        // Replace form with success message
-        parentContainer.replaceChild(successMessage, form);
-        
-        // Add clearfix to parent container to handle floating
-        if (parentContainer) {
-            parentContainer.style.overflow = 'hidden';
-            parentContainer.style.width = '100%';
-            parentContainer.style.position = 'relative';
-            parentContainer.style.zIndex = '5';
+        if (offerHeader && offerSection) {
+            // If form is inside offer__header, insert success message after the header but within the section
+            const insertionPoint = offerHeader.nextElementSibling || offerSection.querySelector('.stack') || offerSection;
             
-            // Create clearfix div after success message
-            const clearDiv = document.createElement('div');
-            clearDiv.style.clear = 'both';
-            clearDiv.style.height = '0';
-            clearDiv.style.visibility = 'hidden';
-            parentContainer.appendChild(clearDiv);
+            // Hide the form
+            form.style.display = 'none';
+            
+            // Insert success message outside of offer__header
+            if (insertionPoint === offerSection) {
+                // Insert at the beginning of section content after header
+                const container = offerSection.querySelector('.container');
+                const stackElement = container.querySelector('.stack');
+                if (stackElement) {
+                    container.insertBefore(successMessage, stackElement);
+                } else {
+                    container.appendChild(successMessage);
+                }
+            } else {
+                insertionPoint.parentNode.insertBefore(successMessage, insertionPoint);
+            }
+        } else {
+            // Default behavior for forms not in offer__header
+            const parentContainer = form.parentNode;
+            parentContainer.replaceChild(successMessage, form);
         }
+        
+        // Add clearfix to handle any floating issues
+        const clearDiv = document.createElement('div');
+        clearDiv.style.clear = 'both';
+        clearDiv.style.height = '0';
+        clearDiv.style.visibility = 'hidden';
+        successMessage.parentNode.insertBefore(clearDiv, successMessage.nextSibling);
         
         // Add success animation
         successMessage.classList.add('animate-scale-in');

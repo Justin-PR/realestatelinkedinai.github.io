@@ -302,10 +302,37 @@ class LinkedInAuthorityApp {
         successMessage.innerHTML = `
             <div class="success__icon">✓</div>
             <h3>Success!</h3>
-            <p>Downloading now. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Manual download</a></p>
+            <p>Your strategy guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Click here if it doesn't start</a></p>
         `;
         
-        form.parentNode.replaceChild(successMessage, form);
+        // Find the closest section container to avoid offer__header conflicts
+        const offerSection = form.closest('section');
+        const offerHeader = form.closest('.offer__header');
+        
+        if (offerHeader && offerSection) {
+            // If form is inside offer__header, insert success message after the header but within the section
+            const insertionPoint = offerHeader.nextElementSibling || offerSection.querySelector('.stack') || offerSection;
+            
+            // Hide the form
+            form.style.display = 'none';
+            
+            // Insert success message outside of offer__header
+            if (insertionPoint === offerSection) {
+                // Insert at the beginning of section content after header
+                const container = offerSection.querySelector('.container');
+                const stackElement = container.querySelector('.stack');
+                if (stackElement) {
+                    container.insertBefore(successMessage, stackElement);
+                } else {
+                    container.appendChild(successMessage);
+                }
+            } else {
+                insertionPoint.parentNode.insertBefore(successMessage, insertionPoint);
+            }
+        } else {
+            // Default behavior for forms not in offer__header
+            form.parentNode.replaceChild(successMessage, form);
+        }
         
         // Add success animation
         successMessage.classList.add('form-success');
