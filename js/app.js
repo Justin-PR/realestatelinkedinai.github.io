@@ -305,42 +305,46 @@ class LinkedInAuthorityApp {
             <p>Your strategy guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.html" target="_blank" class="download-backup-link">Click here if it doesn't start</a></p>
         `;
         
-        // Find the closest section container to avoid offer section conflicts
-        const offerSection = form.closest('.offer');
+        // ALWAYS use safe positioning to avoid any background conflicts
+        // Find the form's containing section
+        const currentSection = form.closest('section');
+        const nextSection = currentSection ? currentSection.nextElementSibling : null;
         
-        if (offerSection) {
-            // If form is inside offer section, insert success message AFTER the entire offer section
-            const nextSection = offerSection.nextElementSibling;
-            
-            // Hide the form instead of removing it
-            form.style.display = 'none';
-            
-            // Create a standalone success container
-            const successContainer = document.createElement('div');
-            successContainer.className = 'success-section';
-            successContainer.style.cssText = `
-                background: white;
-                padding: 3rem 0;
-                width: 100%;
-                position: relative;
-                z-index: 1000;
-                clear: both;
-            `;
-            
-            const containerDiv = document.createElement('div');
-            containerDiv.className = 'container';
-            containerDiv.appendChild(successMessage);
-            successContainer.appendChild(containerDiv);
-            
-            // Insert after the offer section
-            if (nextSection) {
-                offerSection.parentNode.insertBefore(successContainer, nextSection);
-            } else {
-                offerSection.parentNode.appendChild(successContainer);
-            }
+        // Hide the form instead of removing it
+        form.style.display = 'none';
+        
+        // Create a standalone success container that's always safe
+        const successContainer = document.createElement('div');
+        successContainer.className = 'success-section';
+        successContainer.style.cssText = `
+            background: white !important;
+            padding: 3rem 0 !important;
+            width: 100% !important;
+            position: relative !important;
+            z-index: 1000 !important;
+            clear: both !important;
+            border-top: 1px solid #e2e8f0;
+            margin: 0 !important;
+        `;
+        
+        const containerDiv = document.createElement('div');
+        containerDiv.className = 'container';
+        containerDiv.style.cssText = `
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        `;
+        containerDiv.appendChild(successMessage);
+        successContainer.appendChild(containerDiv);
+        
+        // Always insert after the current section, regardless of which section it is
+        if (currentSection && nextSection) {
+            currentSection.parentNode.insertBefore(successContainer, nextSection);
+        } else if (currentSection) {
+            currentSection.parentNode.appendChild(successContainer);
         } else {
-            // Default behavior for forms not in offer section
-            form.parentNode.replaceChild(successMessage, form);
+            // Fallback: insert after body content
+            document.body.appendChild(successContainer);
         }
         
         // Add success animation
