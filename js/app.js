@@ -305,32 +305,41 @@ class LinkedInAuthorityApp {
             <p>Your strategy guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.html" target="_blank" class="download-backup-link">Click here if it doesn't start</a></p>
         `;
         
-        // Find the closest section container to avoid offer__header conflicts
-        const offerSection = form.closest('section');
-        const offerHeader = form.closest('.offer__header');
+        // Find the closest section container to avoid offer section conflicts
+        const offerSection = form.closest('.offer');
         
-        if (offerHeader && offerSection) {
-            // If form is inside offer__header, insert success message after the header but within the section
-            const insertionPoint = offerHeader.nextElementSibling || offerSection.querySelector('.stack') || offerSection;
+        if (offerSection) {
+            // If form is inside offer section, insert success message AFTER the entire offer section
+            const nextSection = offerSection.nextElementSibling;
             
-            // Hide the form
+            // Hide the form instead of removing it
             form.style.display = 'none';
             
-            // Insert success message outside of offer__header
-            if (insertionPoint === offerSection) {
-                // Insert at the beginning of section content after header
-                const container = offerSection.querySelector('.container');
-                const stackElement = container.querySelector('.stack');
-                if (stackElement) {
-                    container.insertBefore(successMessage, stackElement);
-                } else {
-                    container.appendChild(successMessage);
-                }
+            // Create a standalone success container
+            const successContainer = document.createElement('div');
+            successContainer.className = 'success-section';
+            successContainer.style.cssText = `
+                background: white;
+                padding: 3rem 0;
+                width: 100%;
+                position: relative;
+                z-index: 1000;
+                clear: both;
+            `;
+            
+            const containerDiv = document.createElement('div');
+            containerDiv.className = 'container';
+            containerDiv.appendChild(successMessage);
+            successContainer.appendChild(containerDiv);
+            
+            // Insert after the offer section
+            if (nextSection) {
+                offerSection.parentNode.insertBefore(successContainer, nextSection);
             } else {
-                insertionPoint.parentNode.insertBefore(successMessage, insertionPoint);
+                offerSection.parentNode.appendChild(successContainer);
             }
         } else {
-            // Default behavior for forms not in offer__header
+            // Default behavior for forms not in offer section
             form.parentNode.replaceChild(successMessage, form);
         }
         

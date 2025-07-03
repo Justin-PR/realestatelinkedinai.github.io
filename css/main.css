@@ -1237,6 +1237,26 @@ section {
     clear: both;
 }
 
+/* Success section container styling */
+.success-section {
+    background: var(--neutral-white) !important;
+    border-top: 1px solid var(--neutral-200);
+    width: 100% !important;
+    position: relative !important;
+    z-index: 1000 !important;
+}
+
+.success-section .container {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 var(--container-padding);
+}
+
+.success-section .form__success-message {
+    margin: 0 auto;
+    max-width: 600px;
+}
+
 .success__icon {
     font-size: 3rem;
     margin-bottom: var(--space-4);

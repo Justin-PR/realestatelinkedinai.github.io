@@ -488,42 +488,44 @@ class FormHandler {
         
         successMessage.innerHTML = message;
         
-        // Find the closest section container to avoid offer__header conflicts
-        const offerSection = form.closest('section');
-        const offerHeader = form.closest('.offer__header');
+        // Find the closest section container to avoid offer section conflicts
+        const offerSection = form.closest('.offer');
         
-        if (offerHeader && offerSection) {
-            // If form is inside offer__header, insert success message after the header but within the section
-            const insertionPoint = offerHeader.nextElementSibling || offerSection.querySelector('.stack') || offerSection;
+        if (offerSection) {
+            // If form is inside offer section, insert success message AFTER the entire offer section
+            const nextSection = offerSection.nextElementSibling;
             
-            // Hide the form
+            // Hide the form instead of removing it
             form.style.display = 'none';
             
-            // Insert success message outside of offer__header
-            if (insertionPoint === offerSection) {
-                // Insert at the beginning of section content after header
-                const container = offerSection.querySelector('.container');
-                const stackElement = container.querySelector('.stack');
-                if (stackElement) {
-                    container.insertBefore(successMessage, stackElement);
-                } else {
-                    container.appendChild(successMessage);
-                }
+            // Create a standalone success container
+            const successContainer = document.createElement('div');
+            successContainer.className = 'success-section';
+            successContainer.style.cssText = `
+                background: white;
+                padding: 3rem 0;
+                width: 100%;
+                position: relative;
+                z-index: 1000;
+                clear: both;
+            `;
+            
+            const containerDiv = document.createElement('div');
+            containerDiv.className = 'container';
+            containerDiv.appendChild(successMessage);
+            successContainer.appendChild(containerDiv);
+            
+            // Insert after the offer section
+            if (nextSection) {
+                offerSection.parentNode.insertBefore(successContainer, nextSection);
             } else {
-                insertionPoint.parentNode.insertBefore(successMessage, insertionPoint);
+                offerSection.parentNode.appendChild(successContainer);
             }
         } else {
-            // Default behavior for forms not in offer__header
+            // Default behavior for forms not in offer section
             const parentContainer = form.parentNode;
             parentContainer.replaceChild(successMessage, form);
         }
-        
-        // Add clearfix to handle any floating issues
-        const clearDiv = document.createElement('div');
-        clearDiv.style.clear = 'both';
-        clearDiv.style.height = '0';
-        clearDiv.style.visibility = 'hidden';
-        successMessage.parentNode.insertBefore(clearDiv, successMessage.nextSibling);
         
         // Add success animation
         successMessage.classList.add('animate-scale-in');
@@ -531,6 +533,13 @@ class FormHandler {
         // Ensure mobile viewport positioning after DOM insertion
         setTimeout(() => {
             this.ensureMobileViewport(successMessage);
+            // Scroll to success message if it's outside viewport
+            if (offerSection) {
+                successMessage.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }
         }, 100);
     }
     
