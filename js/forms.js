@@ -472,14 +472,14 @@ class FormHandler {
             default:
                 message = `
                     <div class="success__icon">🎉</div>
-                    <h3>Download Started!</h3>
-                    <p>Your strategy guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Click here</a> if it doesn't start.</p>
+                    <h3>Success!</h3>
+                    <p>Downloading now. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Manual download</a></p>
                     <div class="success__next-steps">
-                        <h4>What's included:</h4>
+                        <h4>Includes:</h4>
                         <ul>
-                            <li>📊 Lead Quality Report</li>
-                            <li>📝 Content Templates</li>
-                            <li>🎯 Authority Building Guide</li>
+                            <li>📊 Lead Reports</li>
+                            <li>📝 Templates</li>
+                            <li>🎯 Strategy Guide</li>
                         </ul>
                     </div>
                 `;
@@ -551,8 +551,8 @@ class FormHandler {
         } else {
             // Desktop styling - keep on left side but larger and more readable
             const desktopStyles = {
-                'max-width': '45%',
-                'width': '45%',
+                'max-width': '50%',
+                'width': '50%',
                 'padding': '2rem 1.5rem',
                 'margin': '1.5rem 0',
                 'margin-left': '0',

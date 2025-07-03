@@ -301,8 +301,8 @@ class LinkedInAuthorityApp {
         successMessage.className = 'form__success';
         successMessage.innerHTML = `
             <div class="success__icon">✓</div>
-            <h3>Download Started!</h3>
-            <p>Your guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Click here</a> if it doesn't start.</p>
+            <h3>Success!</h3>
+            <p>Downloading now. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Manual download</a></p>
         `;
         
         form.parentNode.replaceChild(successMessage, form);
