@@ -761,8 +761,8 @@ class FormHandler {
         // Trigger Facebook Pixel event
         if (typeof fbq !== 'undefined') {
             fbq('track', 'Lead', {
-                content_name: 'LinkedIn Authority AI',
-                content_category: 'Real Estate Software',
+                content_name: 'LinkedIn Authority System',
+                content_category: 'Real Estate Training',
                 value: 197, // Average customer value
                 currency: 'USD'
             });

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-This is a static landing page for "LinkedIn Authority AI" - an AI-powered content automation tool for real estate agents. The website targets successful real estate agents earning $100K+ annually who want to attract high-net-worth clients through LinkedIn.
+This is a static landing page for "LinkedIn Authority System" - a proven methodology and training system for real estate agents. The website targets successful real estate agents earning $100K+ annually who want to attract high-net-worth clients through LinkedIn.
 
 **Target URL:** realestatelinkedinai.github.io
 **Tech Stack:** Pure HTML/CSS/JavaScript (GitHub Pages compatible)
