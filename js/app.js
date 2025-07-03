@@ -319,7 +319,31 @@ class LinkedInAuthorityApp {
             clear: both !important;
             width: 100% !important;
             box-sizing: border-box !important;
+            color: #334155 !important;
+            text-align: center !important;
         `;
+        
+        // Style the inner elements to ensure they're visible
+        const icon = successMessage.querySelector('.success__icon');
+        const heading = successMessage.querySelector('h3');
+        const paragraph = successMessage.querySelector('p');
+        const link = successMessage.querySelector('.download-backup-link');
+        
+        if (icon) {
+            icon.style.cssText = 'font-size: 2rem !important; margin-bottom: 1rem !important; display: block !important;';
+        }
+        
+        if (heading) {
+            heading.style.cssText = 'color: #1a365d !important; font-size: 1.5rem !important; margin-bottom: 1rem !important; font-weight: 600 !important;';
+        }
+        
+        if (paragraph) {
+            paragraph.style.cssText = 'color: #334155 !important; font-size: 1rem !important; margin-bottom: 0 !important;';
+        }
+        
+        if (link) {
+            link.style.cssText = 'color: #2b77e6 !important; text-decoration: underline !important; font-weight: 600 !important;';
+        }
         
         // Simply replace the form with the success message
         form.parentNode.insertBefore(successMessage, form);

@@ -502,7 +502,50 @@ class FormHandler {
             clear: both !important;
             width: 100% !important;
             box-sizing: border-box !important;
+            color: #334155 !important;
+            text-align: center !important;
         `;
+        
+        // Style the inner elements to ensure they're visible
+        const icon = successMessage.querySelector('.success__icon');
+        const heading = successMessage.querySelector('h3');
+        const paragraph = successMessage.querySelector('p');
+        const nextSteps = successMessage.querySelector('.success__next-steps');
+        const link = successMessage.querySelector('.download-backup-link');
+        
+        if (icon) {
+            icon.style.cssText = 'font-size: 2rem !important; margin-bottom: 1rem !important; display: block !important;';
+        }
+        
+        if (heading) {
+            heading.style.cssText = 'color: #1a365d !important; font-size: 1.5rem !important; margin-bottom: 1rem !important; font-weight: 600 !important;';
+        }
+        
+        if (paragraph) {
+            paragraph.style.cssText = 'color: #334155 !important; font-size: 1rem !important; margin-bottom: 1rem !important;';
+        }
+        
+        if (link) {
+            link.style.cssText = 'color: #2b77e6 !important; text-decoration: underline !important; font-weight: 600 !important;';
+        }
+        
+        if (nextSteps) {
+            nextSteps.style.cssText = 'margin-top: 1rem !important; text-align: left !important;';
+            const nextStepsH4 = nextSteps.querySelector('h4');
+            const nextStepsList = nextSteps.querySelector('ul');
+            
+            if (nextStepsH4) {
+                nextStepsH4.style.cssText = 'color: #1a365d !important; font-size: 1.125rem !important; margin-bottom: 0.5rem !important; font-weight: 600 !important;';
+            }
+            
+            if (nextStepsList) {
+                nextStepsList.style.cssText = 'color: #334155 !important; padding-left: 1rem !important; margin: 0 !important;';
+                const listItems = nextStepsList.querySelectorAll('li');
+                listItems.forEach(li => {
+                    li.style.cssText = 'color: #334155 !important; margin-bottom: 0.25rem !important;';
+                });
+            }
+        }
         
         // Simply replace the form with the success message
         form.parentNode.insertBefore(successMessage, form);
