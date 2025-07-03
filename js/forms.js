@@ -489,13 +489,15 @@ class FormHandler {
         successMessage.innerHTML = message;
         
         // ALWAYS use safe positioning to avoid any background conflicts
-        // Find the form's containing section
+        // Find the form's containing section and its immediate parent container
         const currentSection = form.closest('section');
         const nextSection = currentSection ? currentSection.nextElementSibling : null;
+        const formParent = form.parentNode;
         
-        // Hide the form instead of removing it
-        form.style.display = 'none';
+        // Replace the form with success message in place first (no white space)
+        formParent.replaceChild(successMessage, form);
         
+        // Then immediately move the success message to a safe location
         // Create a standalone success container that's always safe
         const successContainer = document.createElement('div');
         successContainer.className = 'success-section';
@@ -517,8 +519,17 @@ class FormHandler {
             margin: 0 auto;
             padding: 0 1rem;
         `;
+        
+        // Remove success message from original location and put it in new container
+        successMessage.remove();
         containerDiv.appendChild(successMessage);
         successContainer.appendChild(containerDiv);
+        
+        // Hide the original form parent if it's now empty or just has disclaimer text
+        if (formParent && (formParent.children.length === 0 || 
+            (formParent.children.length === 1 && formParent.querySelector('.form__disclaimer')))) {
+            formParent.style.display = 'none';
+        }
         
         // Always insert after the current section, regardless of which section it is
         if (currentSection && nextSection) {
