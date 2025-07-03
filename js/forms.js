@@ -547,14 +547,18 @@ class FormHandler {
             // Add mobile class for additional CSS targeting
             successMessage.classList.add('success-message--mobile', 'success-message--left');
         } else {
-            // Desktop styling - keep on left side but larger
+            // Desktop styling - keep on left side but larger and more readable
             const desktopStyles = {
                 'max-width': '50%',
                 'width': '50%',
+                'padding': '2rem 1.5rem',
+                'margin': '1.5rem 0',
                 'margin-left': '0',
                 'margin-right': 'auto',
                 'float': 'left',
-                'clear': 'both'
+                'clear': 'both',
+                'box-sizing': 'border-box',
+                'font-size': '1rem'
             };
             
             Object.assign(successMessage.style, desktopStyles);
@@ -617,6 +621,45 @@ class FormHandler {
                 if (downloadLink) {
                     downloadLink.style.fontSize = '0.8rem';
                     downloadLink.style.wordBreak = 'break-word';
+                }
+            }
+        } else {
+            // Desktop enhancements for better readability
+            const heading = successMessage.querySelector('h3');
+            if (heading) {
+                heading.style.fontSize = '1.5rem';
+                heading.style.lineHeight = '1.3';
+                heading.style.marginBottom = '1rem';
+            }
+            
+            const paragraph = successMessage.querySelector('p');
+            if (paragraph) {
+                paragraph.style.fontSize = '1rem';
+                paragraph.style.lineHeight = '1.5';
+                paragraph.style.marginBottom = '1.25rem';
+            }
+            
+            const icon = successMessage.querySelector('.success__icon');
+            if (icon) {
+                icon.style.fontSize = '2.5rem';
+                icon.style.marginBottom = '1rem';
+            }
+            
+            const nextSteps = successMessage.querySelector('.success__next-steps');
+            if (nextSteps) {
+                nextSteps.style.marginTop = '1.25rem';
+                
+                const listItems = nextSteps.querySelectorAll('li');
+                listItems.forEach(li => {
+                    li.style.fontSize = '1rem';
+                    li.style.lineHeight = '1.5';
+                    li.style.padding = '0.5rem 0';
+                });
+                
+                const h4 = nextSteps.querySelector('h4');
+                if (h4) {
+                    h4.style.fontSize = '1.125rem';
+                    h4.style.marginBottom = '0.75rem';
                 }
             }
         }
