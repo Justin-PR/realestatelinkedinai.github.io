@@ -305,57 +305,36 @@ class LinkedInAuthorityApp {
             <p>Your strategy guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.html" target="_blank" class="download-backup-link">Click here if it doesn't start</a></p>
         `;
         
-        // NOVEL APPROACH: Replace the entire section content instead of manipulating DOM structure
-        const currentSection = form.closest('section');
+        // SIMPLE FIX: Just replace the form directly with the success message
+        // Apply strong positioning to prevent background conflicts
+        successMessage.style.cssText = `
+            position: relative !important;
+            z-index: 9999 !important;
+            background: white !important;
+            padding: 2rem !important;
+            margin: 2rem 0 !important;
+            border-radius: 8px !important;
+            border: 2px solid #10b981 !important;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+            clear: both !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+        `;
         
-        if (currentSection) {
-            // Clear ALL existing classes to remove any background styling conflicts
-            const originalClasses = currentSection.className;
-            currentSection.className = 'success-section';
-            
-            // Apply clean section styling
-            currentSection.style.cssText = `
-                background: white !important;
-                padding: 3rem 0 !important;
-                margin: 0 !important;
-                position: relative !important;
-                z-index: 1000 !important;
-                clear: both !important;
-                border: none !important;
-                box-shadow: none !important;
-                background-image: none !important;
-            `;
-            
-            // Replace ALL section content with just the success message
-            currentSection.innerHTML = '';
-            
-            const containerDiv = document.createElement('div');
-            containerDiv.className = 'container';
-            containerDiv.style.cssText = `
-                max-width: 1200px;
-                margin: 0 auto;
-                padding: 0 1rem;
-                background: white !important;
-            `;
-            containerDiv.appendChild(successMessage);
-            currentSection.appendChild(containerDiv);
-            
-            // Add success animation
-            successMessage.classList.add('form-success');
-            
-            // Scroll to the success message
-            setTimeout(() => {
-                successMessage.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'start' 
-                });
-            }, 100);
-        } else {
-            // Fallback: use original approach if no section found
-            console.warn('No section found for form, using fallback approach');
-            form.parentNode.insertBefore(successMessage, form);
-            form.remove();
-        }
+        // Simply replace the form with the success message
+        form.parentNode.insertBefore(successMessage, form);
+        form.remove();
+        
+        // Add success animation
+        successMessage.classList.add('form-success');
+        
+        // Scroll to the success message
+        setTimeout(() => {
+            successMessage.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start' 
+            });
+        }, 100);
     }
     
     // Trigger PDF download
