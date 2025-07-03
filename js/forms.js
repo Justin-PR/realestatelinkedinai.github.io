@@ -408,6 +408,11 @@ class FormHandler {
             conversion_type: this.getConversionType(form)
         });
         
+        // Google Ads conversion tracking
+        if (typeof gtag !== 'undefined') {
+            gtag('event', 'conversion', {'send_to': 'AW-17299071748/aV8_CICClukaEITG67hA'});
+        }
+        
         // Trigger PDF download
         this.triggerPDFDownload();
         

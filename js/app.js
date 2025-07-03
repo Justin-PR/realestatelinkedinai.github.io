@@ -274,6 +274,11 @@ class LinkedInAuthorityApp {
             });
             
             if (response.ok) {
+                // Google Ads conversion tracking
+                if (typeof gtag !== 'undefined') {
+                    gtag('event', 'conversion', {'send_to': 'AW-17299071748/aV8_CICClukaEITG67hA'});
+                }
+                
                 this.showSuccessMessage(form);
                 this.trackEvent('form_submit_success', { form_type: form.id });
                 form.reset();
