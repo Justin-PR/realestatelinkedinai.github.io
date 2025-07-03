@@ -473,7 +473,7 @@ class FormHandler {
                 message = `
                     <div class="success__icon">🎉</div>
                     <h3>Download Started!</h3>
-                    <p>Your LinkedIn Strategy Guide is downloading now. If it doesn't start automatically, <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">click here to download</a>.</p>
+                    <p>Your strategy guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Click here</a> if it doesn't start.</p>
                     <div class="success__next-steps">
                         <h4>What's included:</h4>
                         <ul>
@@ -522,13 +522,13 @@ class FormHandler {
         const isSmallScreen = window.innerWidth <= 768;
         
         if (isMobile || isSmallScreen) {
-            // Apply inline styles for left-side mobile rendering
+            // Apply aggressive inline styles for mobile rendering
             const mobileStyles = {
-                'max-width': window.innerWidth <= 480 ? 'calc(100vw - 1rem)' : 'calc(60vw - 1rem)',
-                'width': window.innerWidth <= 480 ? 'calc(100vw - 1rem)' : 'calc(60vw - 1rem)',
-                'padding': '1rem 0.75rem',
-                'margin': '1rem 0',
-                'margin-left': '0.5rem',
+                'max-width': window.innerWidth <= 480 ? 'calc(100vw - 0.5rem)' : 'calc(60vw - 1rem)',
+                'width': window.innerWidth <= 480 ? 'calc(100vw - 0.5rem)' : 'calc(60vw - 1rem)',
+                'padding': window.innerWidth <= 480 ? '0.75rem 0.5rem' : '1rem 0.75rem',
+                'margin': window.innerWidth <= 480 ? '0.75rem 0.25rem' : '1rem 0',
+                'margin-left': window.innerWidth <= 480 ? '0.25rem' : '0.5rem',
                 'margin-right': 'auto',
                 'box-sizing': 'border-box',
                 'position': 'relative',
@@ -537,7 +537,9 @@ class FormHandler {
                 'clear': 'both',
                 'word-wrap': 'break-word',
                 'overflow-wrap': 'break-word',
-                'white-space': 'normal'
+                'white-space': 'normal',
+                'overflow': 'hidden',
+                'text-overflow': 'ellipsis'
             };
             
             Object.assign(successMessage.style, mobileStyles);
@@ -593,13 +595,28 @@ class FormHandler {
             if (window.innerWidth <= 480) {
                 const heading = successMessage.querySelector('h3');
                 if (heading) {
-                    heading.style.fontSize = '1.25rem';
-                    heading.style.lineHeight = '1.3';
+                    heading.style.fontSize = '1.1rem';
+                    heading.style.lineHeight = '1.2';
+                    heading.style.wordWrap = 'break-word';
                 }
                 
                 const icon = successMessage.querySelector('.success__icon');
                 if (icon) {
-                    icon.style.fontSize = '2rem';
+                    icon.style.fontSize = '1.5rem';
+                }
+                
+                const paragraph = successMessage.querySelector('p');
+                if (paragraph) {
+                    paragraph.style.fontSize = '0.8rem';
+                    paragraph.style.lineHeight = '1.3';
+                    paragraph.style.wordWrap = 'break-word';
+                    paragraph.style.overflowWrap = 'break-word';
+                }
+                
+                const downloadLink = successMessage.querySelector('.download-backup-link');
+                if (downloadLink) {
+                    downloadLink.style.fontSize = '0.8rem';
+                    downloadLink.style.wordBreak = 'break-word';
                 }
             }
         }

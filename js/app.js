@@ -302,7 +302,7 @@ class LinkedInAuthorityApp {
         successMessage.innerHTML = `
             <div class="success__icon">✓</div>
             <h3>Download Started!</h3>
-            <p>Your LinkedIn Strategy Guide is downloading now. If it doesn't start automatically, <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">click here to download</a>.</p>
+            <p>Your guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">Click here</a> if it doesn't start.</p>
         `;
         
         form.parentNode.replaceChild(successMessage, form);
