@@ -210,11 +210,19 @@
     /* Desktop-specific success message styling */
     @media (min-width: 1025px) {
         .success-message--left {
-            max-width: 50% !important;
-            width: 50% !important;
+            max-width: 45% !important;
+            width: 45% !important;
             padding: 2rem 1.5rem !important;
             margin: 1.5rem 0 !important;
             font-size: 1rem !important;
+            background: var(--neutral-white) !important;
+            border: 2px solid var(--success) !important;
+            border-radius: var(--radius-xl) !important;
+            box-shadow: var(--shadow-lg) !important;
+            position: relative !important;
+            z-index: 100 !important;
+            overflow: visible !important;
+            text-overflow: initial !important;
         }
         
         .success-message--left h3 {

@@ -498,6 +498,8 @@ class FormHandler {
         if (parentContainer) {
             parentContainer.style.overflow = 'hidden';
             parentContainer.style.width = '100%';
+            parentContainer.style.position = 'relative';
+            parentContainer.style.zIndex = '5';
             
             // Create clearfix div after success message
             const clearDiv = document.createElement('div');
@@ -549,8 +551,8 @@ class FormHandler {
         } else {
             // Desktop styling - keep on left side but larger and more readable
             const desktopStyles = {
-                'max-width': '50%',
-                'width': '50%',
+                'max-width': '45%',
+                'width': '45%',
                 'padding': '2rem 1.5rem',
                 'margin': '1.5rem 0',
                 'margin-left': '0',
@@ -558,7 +560,15 @@ class FormHandler {
                 'float': 'left',
                 'clear': 'both',
                 'box-sizing': 'border-box',
-                'font-size': '1rem'
+                'font-size': '1rem',
+                'background': 'var(--neutral-white)',
+                'border': '2px solid var(--success)',
+                'border-radius': 'var(--radius-xl)',
+                'box-shadow': 'var(--shadow-lg)',
+                'position': 'relative',
+                'z-index': '100',
+                'overflow': 'visible',
+                'text-overflow': 'initial'
             };
             
             Object.assign(successMessage.style, desktopStyles);

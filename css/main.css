@@ -1205,6 +1205,11 @@ section {
     box-shadow: var(--shadow-lg);
     text-align: center;
     border: 2px solid var(--success);
+    position: relative;
+    z-index: 100;
+    max-width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .success__icon {
