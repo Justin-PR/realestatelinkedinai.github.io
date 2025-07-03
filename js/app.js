@@ -305,81 +305,57 @@ class LinkedInAuthorityApp {
             <p>Your strategy guide is downloading. <a href="assets/downloads/linkedin-authority-strategy-guide.html" target="_blank" class="download-backup-link">Click here if it doesn't start</a></p>
         `;
         
-        // Replace form directly with success message in a clean container
-        const formParent = form.parentNode;
-        const stackContainer = form.closest('.stack');
+        // NOVEL APPROACH: Replace the entire section content instead of manipulating DOM structure
         const currentSection = form.closest('section');
         
-        // Remove the form completely
-        form.remove();
-        
-        // Collapse empty containers to eliminate white space
-        if (formParent && (formParent.children.length === 0 || 
-            (formParent.children.length === 1 && formParent.querySelector('.form__disclaimer')))) {
-            formParent.style.display = 'none';
-        }
-        
-        // If this empties the stack container, collapse it completely
-        if (stackContainer) {
-            const stackItems = stackContainer.querySelector('.stack__items');
-            const stackCTA = stackContainer.querySelector('.stack__cta');
-            const stackTitle = stackContainer.querySelector('.stack__title');
+        if (currentSection) {
+            // Clear ALL existing classes to remove any background styling conflicts
+            const originalClasses = currentSection.className;
+            currentSection.className = 'success-section';
             
-            // If CTA is hidden and no other meaningful content, hide the whole stack
-            if ((!stackCTA || stackCTA.style.display === 'none') && 
-                (!stackItems || stackItems.children.length === 0)) {
-                stackContainer.style.display = 'none';
-            }
-        }
-        
-        // If we collapsed the stack, hide the entire current section to eliminate all padding
-        if (stackContainer && stackContainer.style.display === 'none' && currentSection) {
-            currentSection.style.display = 'none';
-        }
-        
-        // Create success message in a completely separate, clean section
-        const successSection = document.createElement('section');
-        successSection.className = 'success-section';
-        successSection.style.cssText = `
-            background: white !important;
-            padding: 3rem 0 !important;
-            width: 100% !important;
-            position: relative !important;
-            z-index: 1000 !important;
-            clear: both !important;
-            margin: 0 !important;
-        `;
-        
-        const containerDiv = document.createElement('div');
-        containerDiv.className = 'container';
-        containerDiv.style.cssText = `
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1rem;
-        `;
-        containerDiv.appendChild(successMessage);
-        successSection.appendChild(containerDiv);
-        
-        // Insert the success section right after the current section
-        if (currentSection && currentSection.nextElementSibling) {
-            currentSection.parentNode.insertBefore(successSection, currentSection.nextElementSibling);
-        } else if (currentSection) {
-            currentSection.parentNode.insertBefore(successSection, currentSection.nextSibling);
+            // Apply clean section styling
+            currentSection.style.cssText = `
+                background: white !important;
+                padding: 3rem 0 !important;
+                margin: 0 !important;
+                position: relative !important;
+                z-index: 1000 !important;
+                clear: both !important;
+                border: none !important;
+                box-shadow: none !important;
+                background-image: none !important;
+            `;
+            
+            // Replace ALL section content with just the success message
+            currentSection.innerHTML = '';
+            
+            const containerDiv = document.createElement('div');
+            containerDiv.className = 'container';
+            containerDiv.style.cssText = `
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 0 1rem;
+                background: white !important;
+            `;
+            containerDiv.appendChild(successMessage);
+            currentSection.appendChild(containerDiv);
+            
+            // Add success animation
+            successMessage.classList.add('form-success');
+            
+            // Scroll to the success message
+            setTimeout(() => {
+                successMessage.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'start' 
+                });
+            }, 100);
         } else {
-            // Fallback: append to body
-            document.body.appendChild(successSection);
+            // Fallback: use original approach if no section found
+            console.warn('No section found for form, using fallback approach');
+            form.parentNode.insertBefore(successMessage, form);
+            form.remove();
         }
-        
-        // Add success animation
-        successMessage.classList.add('form-success');
-        
-        // Scroll to success message since it's now in a new section
-        setTimeout(() => {
-            successMessage.scrollIntoView({ 
-                behavior: 'smooth', 
-                block: 'start' 
-            });
-        }, 100);
     }
     
     // Trigger PDF download
