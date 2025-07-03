@@ -1232,6 +1232,19 @@ section {
     color: var(--neutral-600);
 }
 
+/* Download link styling */
+.download-backup-link {
+    color: var(--primary-blue);
+    text-decoration: underline;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.download-backup-link:hover {
+    color: var(--primary-blue-light);
+    text-decoration: none;
+}
+
 /* New Hook/Story/Offer Styles */
 .hero__hook {
     margin-bottom: var(--space-4);

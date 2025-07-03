@@ -408,6 +408,9 @@ class FormHandler {
             conversion_type: this.getConversionType(form)
         });
         
+        // Trigger PDF download
+        this.triggerPDFDownload();
+        
         // Show success message
         this.showSuccessMessage(form, data);
         
@@ -469,8 +472,8 @@ class FormHandler {
             default:
                 message = `
                     <div class="success__icon">🎉</div>
-                    <h3>Success! Check Your Email</h3>
-                    <p>Your LinkedIn Strategy Guide is on its way to ${data.email}.</p>
+                    <h3>Download Started!</h3>
+                    <p>Your LinkedIn Strategy Guide is downloading now. If it doesn't start automatically, <a href="assets/downloads/linkedin-authority-strategy-guide.pdf" download="LinkedIn-Authority-Strategy-Guide.pdf" class="download-backup-link">click here to download</a>.</p>
                     <div class="success__next-steps">
                         <h4>What's included:</h4>
                         <ul>
@@ -607,6 +610,42 @@ class FormHandler {
             return 'demo';
         }
         return 'email_capture';
+    }
+
+    triggerPDFDownload() {
+        try {
+            // Create download link for PDF
+            const pdfUrl = 'assets/downloads/linkedin-authority-strategy-guide.pdf';
+            const downloadLink = document.createElement('a');
+            downloadLink.href = pdfUrl;
+            downloadLink.download = 'LinkedIn-Authority-Strategy-Guide.pdf';
+            downloadLink.style.display = 'none';
+            
+            // Add to DOM, trigger click, then remove
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            
+            // Track download event
+            this.trackEvent('pdf_download', {
+                file_name: 'LinkedIn-Authority-Strategy-Guide.pdf',
+                download_method: 'automatic',
+                status: 'success'
+            });
+        } catch (error) {
+            console.error('PDF download failed:', error);
+            
+            // Track download failure
+            this.trackEvent('pdf_download', {
+                file_name: 'LinkedIn-Authority-Strategy-Guide.pdf',
+                download_method: 'automatic',
+                status: 'failed',
+                error: error.message
+            });
+            
+            // Fallback: Open PDF in new tab
+            window.open('assets/downloads/linkedin-authority-strategy-guide.pdf', '_blank');
+        }
     }
 
     triggerPostSubmissionActions(data) {
