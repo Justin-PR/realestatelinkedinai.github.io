@@ -488,24 +488,48 @@ class FormHandler {
         
         successMessage.innerHTML = message;
         
-        // ALWAYS use safe positioning to avoid any background conflicts
-        // Find the form's containing section and key containers
-        const currentSection = form.closest('section');
-        const nextSection = currentSection ? currentSection.nextElementSibling : null;
+        // Replace form directly with success message in a clean container
         const formParent = form.parentNode;
         const stackContainer = form.closest('.stack');
+        const currentSection = form.closest('section');
         
-        // Create a standalone success container that's always safe
-        const successContainer = document.createElement('div');
-        successContainer.className = 'success-section';
-        successContainer.style.cssText = `
+        // Remove the form completely
+        form.remove();
+        
+        // Collapse empty containers to eliminate white space
+        if (formParent && (formParent.children.length === 0 || 
+            (formParent.children.length === 1 && formParent.querySelector('.form__disclaimer')))) {
+            formParent.style.display = 'none';
+        }
+        
+        // If this empties the stack container, collapse it completely
+        if (stackContainer) {
+            const stackItems = stackContainer.querySelector('.stack__items');
+            const stackCTA = stackContainer.querySelector('.stack__cta');
+            const stackTitle = stackContainer.querySelector('.stack__title');
+            
+            // If CTA is hidden and no other meaningful content, hide the whole stack
+            if ((!stackCTA || stackCTA.style.display === 'none') && 
+                (!stackItems || stackItems.children.length === 0)) {
+                stackContainer.style.display = 'none';
+            }
+        }
+        
+        // If we collapsed the stack, hide the entire current section to eliminate all padding
+        if (stackContainer && stackContainer.style.display === 'none' && currentSection) {
+            currentSection.style.display = 'none';
+        }
+        
+        // Create success message in a completely separate, clean section
+        const successSection = document.createElement('section');
+        successSection.className = 'success-section';
+        successSection.style.cssText = `
             background: white !important;
             padding: 3rem 0 !important;
             width: 100% !important;
             position: relative !important;
             z-index: 1000 !important;
             clear: both !important;
-            border-top: 1px solid #e2e8f0;
             margin: 0 !important;
         `;
         
@@ -517,38 +541,16 @@ class FormHandler {
             padding: 0 1rem;
         `;
         containerDiv.appendChild(successMessage);
-        successContainer.appendChild(containerDiv);
+        successSection.appendChild(containerDiv);
         
-        // Remove form and collapse containers to eliminate white space
-        form.remove();
-        
-        // If this empties the form parent (.stack__cta), hide it
-        if (formParent && (formParent.children.length === 0 || 
-            (formParent.children.length === 1 && formParent.querySelector('.form__disclaimer')))) {
-            formParent.style.display = 'none';
-        }
-        
-        // If this empties or mostly empties the stack container, collapse it
-        if (stackContainer) {
-            const stackItems = stackContainer.querySelector('.stack__items');
-            const stackCTA = stackContainer.querySelector('.stack__cta');
-            const stackTitle = stackContainer.querySelector('.stack__title');
-            
-            // If only title remains or everything is hidden, collapse the stack
-            if ((!stackItems || stackItems.children.length === 0) && 
-                (!stackCTA || stackCTA.style.display === 'none')) {
-                stackContainer.style.display = 'none';
-            }
-        }
-        
-        // Always insert after the current section, regardless of which section it is
-        if (currentSection && nextSection) {
-            currentSection.parentNode.insertBefore(successContainer, nextSection);
+        // Insert the success section right after the current section
+        if (currentSection && currentSection.nextElementSibling) {
+            currentSection.parentNode.insertBefore(successSection, currentSection.nextElementSibling);
         } else if (currentSection) {
-            currentSection.parentNode.appendChild(successContainer);
+            currentSection.parentNode.insertBefore(successSection, currentSection.nextSibling);
         } else {
-            // Fallback: insert after body content
-            document.body.appendChild(successContainer);
+            // Fallback: append to body
+            document.body.appendChild(successSection);
         }
         
         // Add success animation
