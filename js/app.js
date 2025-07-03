@@ -306,15 +306,12 @@ class LinkedInAuthorityApp {
         `;
         
         // ALWAYS use safe positioning to avoid any background conflicts
-        // Find the form's containing section and its immediate parent container
+        // Find the form's containing section and key containers
         const currentSection = form.closest('section');
         const nextSection = currentSection ? currentSection.nextElementSibling : null;
         const formParent = form.parentNode;
+        const stackContainer = form.closest('.stack');
         
-        // Replace the form with success message in place first (no white space)
-        formParent.replaceChild(successMessage, form);
-        
-        // Then immediately move the success message to a safe location
         // Create a standalone success container that's always safe
         const successContainer = document.createElement('div');
         successContainer.className = 'success-section';
@@ -336,16 +333,29 @@ class LinkedInAuthorityApp {
             margin: 0 auto;
             padding: 0 1rem;
         `;
-        
-        // Remove success message from original location and put it in new container
-        successMessage.remove();
         containerDiv.appendChild(successMessage);
         successContainer.appendChild(containerDiv);
         
-        // Hide the original form parent if it's now empty or just has disclaimer text
+        // Remove form and collapse containers to eliminate white space
+        form.remove();
+        
+        // If this empties the form parent (.stack__cta), hide it
         if (formParent && (formParent.children.length === 0 || 
             (formParent.children.length === 1 && formParent.querySelector('.form__disclaimer')))) {
             formParent.style.display = 'none';
+        }
+        
+        // If this empties or mostly empties the stack container, collapse it
+        if (stackContainer) {
+            const stackItems = stackContainer.querySelector('.stack__items');
+            const stackCTA = stackContainer.querySelector('.stack__cta');
+            const stackTitle = stackContainer.querySelector('.stack__title');
+            
+            // If only title remains or everything is hidden, collapse the stack
+            if ((!stackItems || stackItems.children.length === 0) && 
+                (!stackCTA || stackCTA.style.display === 'none')) {
+                stackContainer.style.display = 'none';
+            }
         }
         
         // Always insert after the current section, regardless of which section it is
